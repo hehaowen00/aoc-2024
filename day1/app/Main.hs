@@ -13,12 +13,11 @@ parseLine line =
 
 main :: IO ()
 main = do
-    handle <- openFile "input.txt" ReadMode
-    contents <- hGetContents handle
+    withFile "input.txt" ReadMode $ \handle -> do
+        contents <- hGetContents handle
 
-    let lns = lines contents
-        results = map words lns
-        res = map parseLine lns
-        (left, right) = unzip res
+        let lns = lines contents
+            res = map parseLine lns
+            (left, right) = unzip res
 
-    print $ sum $ findDistance (sort left) (sort right) 
+        print $ sum $ findDistance (sort left) (sort right) 
