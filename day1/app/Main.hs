@@ -3,15 +3,13 @@ module Main where
 import System.IO
 import Data.List
 
--- findDistance (x:xs) (y:ys) = abs (x - y) : findDistance xs ys
--- findDistance _ _ = []
+findDistance :: [Int] -> [Int] -> [Int]
+findDistance xs ys = zipWith (\x y -> abs (x - y)) xs ys
 
-findDistance xs ys = zipWith (\x y -> abs (x - y))
-
-parseLine :: String -> [Int]
-parseLine line = do
+parseLine :: String -> (Int, Int)
+parseLine line = 
     let [left, right] = words line
-    [read left, read right :: Int]
+    in (read left, read right :: Int)
 
 main :: IO ()
 main = do
@@ -20,11 +18,7 @@ main = do
 
     let lns = lines contents
         results = map words lns
+        res = map parseLine lns
+        (left, right) = unzip res
 
-    let left = map head results
-    let right = map last results
-
-    let leftNums = map (read :: String -> Int) left
-    let rightNums = map (read :: String -> Int) right
-
-    print (sum (findDistance (sort leftNums) (sort rightNums)))
+    print $ sum $ findDistance (sort left) (sort right) 
